@@ -1,8 +1,16 @@
-const courseList  = ({courses}) => {
-    let keys = Object.keys(courses)
-    return <div> {keys.map(key => <div> {courses[key].term} CS {courses[key].number}: {courses[key].title}</div>)} 
-    </div>
+import CourseCard from './CourseCard';
+import './CourseList.css'
 
+const courseList  = ({courses}) => {
+    let courseKeys = Object.keys(courses);
+    return <div className="course-list"> 
+        {courseKeys.map((key, i) =>  
+            <CourseCard title={`${courses[key].term} CS ${courses[key].number}`}
+                        name={courses[key].title}
+                        time={courses[key].meets}
+            />
+        )} 
+    </div>
 }
 
 export default courseList;

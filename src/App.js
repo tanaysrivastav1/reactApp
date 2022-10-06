@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Banner from './components/Banner';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import CourseList from './components/CourseList';
 
 const schedule = {
