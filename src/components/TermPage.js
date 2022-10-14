@@ -2,6 +2,7 @@ import TermSelector from "./TermSelector";
 import CourseList from "./CourseList";
 import Modal from './Modal';
 import { useState } from "react";
+import './TermPage.css';
 
 const TermPage = ({courses}) => {
     const [selectedTerm, setSelectedTerm] = useState('Fall');
