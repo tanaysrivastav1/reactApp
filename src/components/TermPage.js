@@ -11,25 +11,21 @@ const TermPage = ({courses}) => {
     const [coursePlanOpened, setCoursePlanOpened] = useState(false);
     const [incorrectCourses, setincorrectCourses] = useState([])
 
+    const openModal = () => setCoursePlanOpened(true);
+    const closeModal = () => setCoursePlanOpened(false);
+
     const toggleSelected = (item) => {
-
-        if (!incorrectCourses.includes(item)) {
-            setselectedCourses(selectedCourses.includes(item) ?
-            selectedCourses.filter(n => n !== item)
-            : [...selectedCourses, item]);
-
-    let incorrect = getIncorrectCourses(courses, item);
-    setincorrectCourses(
-        selectedCourses.includes(item)
-        ? incorrectCourses.filter(course => !incorrect.includes(course))
-        : incorrectCourses.concat(incorrect)
-    )
-
-}
-    }
+        if(selectedCourses.includes(item) || !getIncorrectCourses(courses[item], Object.entries(courses)
+            .filter(([id, course]) => selectedCourses.includes(id))
+            .map(([id, course]) => course)))
+        setselectedCourses(
+            selectedCourses.includes(item)
+            ? selectedCourses.filter(x => x !== item)
+            : [...selectedCourses, item]
+        )
+    };
 
     const openCoursePlan = () => setCoursePlanOpened(true);
-    const closeCoursePlan = () => setCoursePlanOpened(false);
 
     return (
         <div>
@@ -37,7 +33,7 @@ const TermPage = ({courses}) => {
                 <TermSelector className='ms-auto btn' selection={selectedTerm} setSelection={setSelectedTerm}/>
                 <button className="ms-auto btn btn-outline-primary" onClick={openCoursePlan}><i className="bi bi-cart4">Course Plan</i></button>
             </nav>
-            <Modal open={coursePlanOpened} close={closeCoursePlan}>
+            <Modal open={coursePlanOpened} close={closeModal}>
                 <div>
                     {selectedCourses.length > 0 
                     ? selectedCourses.map(selectedCourse => <div>{` CS ${courses[selectedCourse].number} ${courses[selectedCourse].title} ${courses[selectedCourse].meets}`} </div>)

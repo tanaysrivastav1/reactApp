@@ -1,40 +1,44 @@
-export const getIncorrectCourses = (courses, courseid) => Object.keys(courses).filter(course => course !== courseid && courseWrong(courses[courseid], courses[course]))
+const days = ['M', 'Tu', 'W', 'Th', 'F'];
 
-//compare two course times
-const courseWrong = (course1, course2) => {
-    const [m1, m2] = [course1.meets, course2.meets]
-    if (m1 === "" || m2 == "") {
-        return false
-    }
-    //get the term for courses
-    const [term1, term2] = [course1.term, course2.term]
+export const getIncorrectCourses = (course, selected) => (
+    selected.some(selection => courseConflict(course, selection))
+);
 
-    //get the date for courses
-    const [date1, time1] = m1.split(" ");
-    const [date2, time2] = m2.split(" ");
+//get meets from courses
+const getMeets = (meet) => {
+    const [meetDays, meetHours] = meet.split(' ');
+    const [start, end] = meetHours.split('-');
+    const [startHour, startMinute] = start.split(':');
+    const [endHour, endMinute] = end.split(':');
 
-    return inSameTerm(term1, term2)
-        && onSameDate(date1.split(/(?=[A-Z])/), date2.split(/(?=[A-Z])/)) 
-        && atSameTime(time1, time2)
-}
+    return {
+        days: days.filter(day => meetDays.search(day) !== -1),
+        hours: {
+          start: startHour * 60 + startMinute * 1,
+          end: endHour * 60 + endMinute * 1
+        }
+      }
+};
 
-const compareTime = (time1, time2) => {
-    const [hour1, min1] = time1.split(':').map(x => parseInt(x, 10));
-    const [hour2, min2] = time2.split(':').map(x => parseInt(x, 10));
-    
-    return hour1 > hour2 ? 1 : hour1 < hour2 ? -1 : min1 > min2 ? 1 : min1 < min2 ? -1 : 0
-}
+const daysOverlap = (days1, days2) => ( 
+    days.some(day => days1.includes(day) && days2.includes(day))
+  );
 
-const atSameTime = (time1, time2) => {
-    const [start1, end1] = time1.split('-');
-    const [start2, end2] = time2.split('-');
+  const hoursOverlap = (hours1, hours2) => (
+    Math.max(hours1.start, hours2.start) < Math.min(hours1.end, hours2.end)
+  );
 
-    return (compareTime(start1, start2) >= 0 && compareTime(start1, end2) <= 0)
-    || (compareTime(start2, start1) >= 0 && compareTime(start2, end1) <= 0)
-    || (compareTime(start1, start2) >= 0 && compareTime(end1, end2) <= 0)
-    || (compareTime(start2, start1) >= 0 && compareTime(end2, end1) <= 0)
+  const timeConflict = (course1, course2) => {
+    const course1Time = getMeets(course1.meets);
+    const course2Time = getMeets(course2.meets);
 
-}
+    return daysOverlap(course1Time.days, course2Time.days) 
+        && hoursOverlap(course1Time.hours, course2Time.hours)
+  };
 
-const onSameDate = (dates1, dates2) => dates1.some(date => dates2.includes(date));
-const inSameTerm = (term1, term2) => term1 === term2
+  const courseConflict = (course1, course2) => (
+    course1.term === course2.term
+    && timeConflict(course1, course2)
+  );
+
+ 
