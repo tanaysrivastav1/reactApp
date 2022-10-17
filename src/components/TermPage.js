@@ -11,7 +11,6 @@ const TermPage = ({courses}) => {
     const [coursePlanOpened, setCoursePlanOpened] = useState(false);
     const [incorrectCourses, setincorrectCourses] = useState([])
 
-    const openModal = () => setCoursePlanOpened(true);
     const closeModal = () => setCoursePlanOpened(false);
 
     const toggleSelected = (item) => {
