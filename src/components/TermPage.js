@@ -37,8 +37,7 @@ const TermPage = ({courses}) => {
                     {selectedCourses.length > 0 
                     ? selectedCourses.map(selectedCourse => <div>{` CS ${courses[selectedCourse].number} ${courses[selectedCourse].title} ${courses[selectedCourse].meets}`} </div>)
                     : <div>
-                        <div>No course is selected.</div>
-                        <div>Clicking on a course card to select the course.</div>
+                        <div>Please select a course to show up on the course plan.</div>
                     </div>
                     }
                 </div>
