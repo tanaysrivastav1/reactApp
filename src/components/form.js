@@ -21,8 +21,20 @@ const ButtonBar = ({message, disabled}) => {
   );
 };
 
+
+const checkData = (key, val) => {
+  switch (key) {
+    case 'title':
+      return /(^\w\w)/.test(val) ? '' : 'input must have at least two characters';
+    case 'meets':
+      return /^$|^ *((?:M|Tu|W|Th|F)+) +(\d\d?):(\d\d) *[ -] *(\d\d?):(\d\d) *$/.test(val) 
+        ? '' : 'input must contain days from start to end (Example: MWF 12:30-13:20)';
+    default: return 'enter text above'
+  }
+}
+
 const Form = ({values}) => {
-  const [state, change] = useFormData(null, values);
+  const [state, change] = useFormData(checkData, values);
   const submit = (evt) => {
   };
 
