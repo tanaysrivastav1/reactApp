@@ -1,5 +1,6 @@
 import { useFormData } from './useFormData';
 import { useNavigate } from 'react-router-dom';
+import { useDbUpdate } from '../utilities/firebase';
 
 const InputField = ({name, text, state, change}) => (
   <div className="mb-3">
@@ -10,12 +11,13 @@ const InputField = ({name, text, state, change}) => (
   </div>
 );
 
-const ButtonBar = ({message, disabled}) => {
+const ButtonBar = ({message}) => {
     const navigate = useNavigate();
 
   return (
     <div className="d-flex">
       <button type="button" className="btn btn-outline-dark me-2" onClick={() => navigate('/')}>Cancel</button>
+      <button type="submit" className="btn btn-success me-auto" onChange = {Form} onClick={() => navigate('/')}>Submit</button>
       <span className="p-2">{message}</span>
     </div>
   );
@@ -33,16 +35,23 @@ const checkData = (key, val) => {
   }
 }
 
-const Form = ({values}) => {
+const Form = ({values, id}) => {
+  
+  //update the course with given inputs
+  const [update, result] = useDbUpdate(`/courses/${id}`);
   const [state, change] = useFormData(checkData, values);
   const submit = (evt) => {
+    evt.preventDefault();
+    if (!state.errors) {
+      update(state.values)
+    }
   };
 
   return (
     <form onSubmit={submit} noValidate className={state.errors ? 'was-validated' : null}>
       <InputField name="title" text="Title" state={state} change={change} />
       <InputField name="meets" text="Meeting Times" state={state} change={change} />
-      <ButtonBar message={""} />
+      <ButtonBar message={result} />
     </form>
   )
 };
