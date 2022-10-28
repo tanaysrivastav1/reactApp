@@ -1,6 +1,6 @@
 import { useFormData } from './useFormData';
 import { useNavigate } from 'react-router-dom';
-import { useDbUpdate } from '../utilities/firebase';
+import { useDbUpdate, useAuthState } from '../utilities/firebase';
 
 const InputField = ({name, text, state, change}) => (
   <div className="mb-3">
