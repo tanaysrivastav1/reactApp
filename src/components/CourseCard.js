@@ -4,7 +4,7 @@ import { useAuthState } from '../utilities/firebase'
 
 const CourseCard = ({id, title, name, time, selected, toggleSelected, incorrectCourses}) => {
     const [user] = useAuthState();
-    return <div className={`card m-1 p-2 ${selected.includes(id) ? 'selected' : ''} ${incorrectCourses.includes(id) ? 'incorrect' : ''}`} onClick={() => toggleSelected(id)}>
+    return <div className={`card m-1 p-2 ${selected.includes(id) ? 'selected' : ''} ${incorrectCourses.includes(id) ? 'incorrect' : ''}`} data-cy = "course" onClick={() => toggleSelected(id)}>
         <div className="card-body">
             <h5 className="card-title">{title}</h5>
             <p className="card-text">{name}</p>
